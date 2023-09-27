@@ -59,10 +59,14 @@ provider "azurerm" {
 }
 
 module "core_sa" {
-  source                    = "github.com/Coalfire-CF/terraform-<PROVIDER>-X-X?ref=vX.X.X"
-  name                       = "${replace(var.resource_prefix, "-", "")}tfstatesa"
-  resource_group_name        = azurerm_resource_group.management.name
+  source                    = "github.com/Coalfire-CF/terraform-azurerm-automation-account"
+  name                       = "${var.resource_prefix}-aa"
+  resource_group_name        = data.terraform_remote_state.setup.outputs.management_rg_name
   location                   = var.location
+  log_analytics_workspace_id = data.terraform_remote_state.core.outputs.core_la_id
+
+  global_tags   = var.global_tags
+  regional_tags = var.regional_tags
 }
 ```
 
