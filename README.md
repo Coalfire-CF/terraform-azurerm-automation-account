@@ -68,7 +68,6 @@ module "core_sa" {
 
 
 <!-- BEGIN_TF_DOCS -->
-
 ## Requirements
 
 No requirements.
@@ -110,7 +109,6 @@ No modules.
 | <a name="output_aa_name"></a> [aa\_name](#output\_aa\_name) | n/a |
 | <a name="output_aa_primary_registration_key"></a> [aa\_primary\_registration\_key](#output\_aa\_primary\_registration\_key) | n/a |
 | <a name="output_aa_principal_id"></a> [aa\_principal\_id](#output\_aa\_principal\_id) | n/a |
-
 <!-- END_TF_DOCS -->
 
 ## Contributing
