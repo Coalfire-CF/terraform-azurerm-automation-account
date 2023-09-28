@@ -4,7 +4,7 @@ variable "automation_account_name" {
 }
 
 variable "resource_group_name" {
-  description = "Azure Region"
+  description = "Resource Group of Automation Account"
   type        = string
 }
 
