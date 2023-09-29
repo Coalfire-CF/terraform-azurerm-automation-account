@@ -19,19 +19,19 @@ If using the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Az
 
 ``` hcl
 terraform {
-  required_version = ">= 1.1.7"
+  required_version = "~>1.5.0"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.45.0"
+      version = "3.61.0"
     }
   }
   backend "azurerm" {
-    resource_group_name  = "prod-mp-core-rg"
-    storage_account_name = "prodmpsatfstate"
-    container_name       = "tfstatecontainer"
+    resource_group_name  = "ex-prod-va-mp-core-rg"
+    storage_account_name = "exprodvampsatfstate"
+    container_name       = "vaextfstatecontainer"
     environment          = "usgovernment"
-    key                  = "automation.tfstate"
+    key                  = "va-az-automation.tfstate"
   }
 }
 ```
@@ -55,15 +55,19 @@ provider "azurerm" {
   features {}
 }
 
-module "core_sa" {
-  source                    = "github.com/Coalfire-CF/terraform-azurerm-automation-account"
-  name                       = "${var.resource_prefix}-aa"
+module "va-aa" {
+  source                     = "github.com/Coalfire-CF/terraform-azurerm-automation-account"
+  automation_account_name    = "${local.resource_prefix}-aa"
   resource_group_name        = data.terraform_remote_state.setup.outputs.management_rg_name
   location                   = var.location
   log_analytics_workspace_id = data.terraform_remote_state.core.outputs.core_la_id
 
-  global_tags   = var.global_tags
-  regional_tags = var.regional_tags
+  global_tags = var.global_tags
+  regional_tags = merge({
+    Function    = "Automation"
+    Plane       = "Management"
+    Environment = "Production"
+  }, var.regional_tags, local.global_local_tags)
 }
 ```
 
