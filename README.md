@@ -92,7 +92,6 @@ No modules.
 | Name | Type |
 |------|------|
 | [azurerm_automation_account.aa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/automation_account) | resource |
-| [azurerm_log_analytics_linked_service.aa_la_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_linked_service) | resource |
 
 ## Inputs
 
