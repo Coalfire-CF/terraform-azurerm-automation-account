@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/compare/v1.1.0...v1.1.1) (2026-01-16)
+
+
+### Bug Fixes
+
+* add LICENSE file ([bd095ac](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/bd095ace3a9ccc9ac1adfd073f23bbad13db0cc8))
+* remove License.md ([#14](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/14)) ([112e216](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/112e216444e857e26c75abd4407d4fc21f9848dd))
+* update license year to 2026 ([#16](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/16)) ([3dda2ff](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/3dda2ff113422265ff36484a050d452578d20e05))
+
 ## [1.1.0](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/compare/v1.0.0...v1.1.0) (2025-11-07)
 
 
