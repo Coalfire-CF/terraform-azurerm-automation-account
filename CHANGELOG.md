@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.2](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/compare/v1.1.1...v1.1.2) (2026-07-03)
+
+
+### Bug Fixes
+
+* **ci:** remove retired org-checkov caller (Checkov retired org-wide — ADR-0017, Actions[#130](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/130)) ([#44](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/44)) ([4badd93](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/4badd93b8a8ab12572ae5ff40f4b72fb304d0e6e))
+
+
+### Miscellaneous
+
+* **ci:** re-pin org workflows to Actions v0.8.1 + dependabot auto-merge ([#49](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/49)) ([86c35d1](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/86c35d1f34f48faf622f339d017500df3d8e1837))
+* **deps:** bump Coalfire-CF/Actions/.github/workflows/org-dependabot-auto-merge.yml ([#50](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/50)) ([74501d1](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/74501d1aedd04d1800488ede8f8b8fb196d7e042))
+* **deps:** bump Coalfire-CF/Actions/.github/workflows/org-markdown-lint.yml ([#54](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/54)) ([3adb228](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/3adb228338e0bbbb9da734d39c011d15361ee709))
+* **deps:** bump Coalfire-CF/Actions/.github/workflows/org-release.yml ([#53](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/53)) ([85d0d6a](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/85d0d6ab2dba4e5e572df5af8fadb65eb32fe823))
+* **deps:** bump Coalfire-CF/Actions/.github/workflows/org-terraform-fmt.yml ([#51](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/51)) ([49ea135](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/49ea1356afb5b011604db6969abb1e1772a8c401))
+* **deps:** bump Coalfire-CF/Actions/.github/workflows/org-terraform-validate.yml ([#52](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/52)) ([86c446b](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/86c446bfd09884ae361174f4942b3989eca5f47a))
+
 ## [1.1.1](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/compare/v1.1.0...v1.1.1) (2026-04-08)
 
 
