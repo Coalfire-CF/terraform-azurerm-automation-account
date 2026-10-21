@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/compare/v1.1.3...v2.0.0) (2026-10-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* tags replaces global_tags and regional_tags. Public network access and local auth default to false. A diagnostic setting is created. Requires Terraform 1.16.6 and azurerm 5.10.
+
+### Features
+
+* require Terraform 1.16.6 and azurerm 5.10 ([#111](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/111)) ([1ce3456](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/1ce345694f002a5a133a1ae943aa7566ba8e1933))
+
+
+### Miscellaneous
+
+* **deps:** bump the org-actions group with 7 updates ([#109](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/issues/109)) ([a600253](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/commit/a600253c43a7aa720730f36d0f369e46ce574bf6))
+
 ## [1.1.3](https://github.com/Coalfire-CF/terraform-azurerm-automation-account/compare/v1.1.2...v1.1.3) (2026-10-20)
 
 
