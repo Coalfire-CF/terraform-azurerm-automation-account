@@ -4,71 +4,49 @@
 
 ## Description
 
-Module to create an Automation Account. It is used in the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework. 
+Module to create an Automation Account with a system-assigned managed identity. It is used in the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework.
 
 Learn more at [Coalfire OpenSource](https://coalfire.com/opensource).
 
 ## Dependencies
 
-- Security Core
-- Region Setup
+A resource group and a Log Analytics workspace, both supplied by the caller.
 
-## Code Updates
+## Network
 
-If using the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework, update `tstate.tf` to the appropriate version and storage accounts, see sample:
+Public network access is off by default. The caller creates private endpoints, for example with
+[terraform-azurerm-private-endpoint](https://github.com/Coalfire-CF/terraform-azurerm-private-endpoint),
+using the `aa_id` output and the `Webhook` and `DSCAndHybridWorker` subresource names.
 
-``` hcl
-terraform {
-  required_version = "~>1.5.0"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.61.0"
-    }
-  }
-  backend "azurerm" {
-    resource_group_name  = "ex-prod-va-mp-core-rg"
-    storage_account_name = "exprodvampsatfstate"
-    container_name       = "vaextfstatecontainer"
-    environment          = "usgovernment"
-    key                  = "va-az-automation.tfstate"
-  }
-}
-```
+## Authentication
 
-## Deployment Steps
+Local (key-based) authentication is off by default. Webhooks, DSC key registration and
+agent-based hybrid workers need `local_authentication_enabled = true`. Runbooks use the
+system-assigned identity.
 
-This module can be called as outlined below.
+## Outputs
 
-- Change directories to the `terraform-azurerm-automation-account` directory.
-- From the `terraform-azurerm-automation-account` directory run `terraform init`.
-- Update the necessary variables
-- Run `terraform plan` to review the resources being created.
-- If everything looks correct in the plan output, run `terraform apply`.
+`aa_primary_registration_key` is sensitive. It is exposed only for DSC node registration.
+
+## Logging
+
+Diagnostic logs go to `log_analytics_workspace_id` through
+[terraform-azurerm-diagnostics](https://github.com/Coalfire-CF/terraform-azurerm-diagnostics).
 
 ## Usage
 
-Include example for how to call the module below with generic variables
+See [examples/default](examples/default) for a complete root. Set `ARM_SUBSCRIPTION_ID` before
+running it.
 
 ```hcl
-provider "azurerm" {
-  features {}
-}
+module "automation_account" {
+  source = "git::https://github.com/Coalfire-CF/terraform-azurerm-automation-account?ref=v2.0.0"
 
-module "va-aa" {
-  source                     = "github.com/Coalfire-CF/terraform-azurerm-automation-account"
-  automation_account_name    = "${local.resource_prefix}-aa"
-  resource_group_name        = data.terraform_remote_state.setup.outputs.management_rg_name
+  automation_account_name    = var.automation_account_name
+  resource_group_name        = var.resource_group_name
   location                   = var.location
-  log_analytics_workspace_id = data.terraform_remote_state.core.outputs.core_la_id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  global_tags = var.global_tags
-  regional_tags = merge({
-    Function    = "Automation"
-    Plane       = "Management"
-    Environment = "Production"
-  }, var.regional_tags, local.global_local_tags)
+  tags = var.tags
 }
 ```
-
-
