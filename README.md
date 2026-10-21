@@ -6,87 +6,72 @@
 
 ## Description
 
-Module to create an Automation Account. It is used in the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework.
+Module to create an Automation Account with a system-assigned managed identity. It is used in the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework.
 
 Learn more at [Coalfire OpenSource](https://coalfire.com/opensource).
 
 ## Dependencies
 
-- Security Core
-- Region Setup
+A resource group and a Log Analytics workspace, both supplied by the caller.
 
-## Code Updates
+## Network
 
-If using the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework, update `tstate.tf` to the appropriate version and storage accounts, see sample:
+Public network access is off by default. The caller creates private endpoints, for example with
+[terraform-azurerm-private-endpoint](https://github.com/Coalfire-CF/terraform-azurerm-private-endpoint),
+using the `aa_id` output and the `Webhook` and `DSCAndHybridWorker` subresource names.
 
-``` hcl
-terraform {
-  required_version = "~>1.5.0"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.61.0"
-    }
-  }
-  backend "azurerm" {
-    resource_group_name  = "ex-prod-va-mp-core-rg"
-    storage_account_name = "exprodvampsatfstate"
-    container_name       = "vaextfstatecontainer"
-    environment          = "usgovernment"
-    key                  = "va-az-automation.tfstate"
-  }
-}
-```
+## Authentication
 
-## Deployment Steps
+Local (key-based) authentication is off by default. Webhooks, DSC key registration and
+agent-based hybrid workers need `local_authentication_enabled = true`. Runbooks use the
+system-assigned identity.
 
-This module can be called as outlined below.
+## Outputs
 
-- Change directories to the `terraform-azurerm-automation-account` directory.
-- From the `terraform-azurerm-automation-account` directory run `terraform init`.
-- Update the necessary variables
-- Run `terraform plan` to review the resources being created.
-- If everything looks correct in the plan output, run `terraform apply`.
+`aa_primary_registration_key` is sensitive. It is exposed only for DSC node registration.
+
+## Logging
+
+Diagnostic logs go to `log_analytics_workspace_id` through
+[terraform-azurerm-diagnostics](https://github.com/Coalfire-CF/terraform-azurerm-diagnostics).
 
 ## Usage
 
-Include example for how to call the module below with generic variables
+See [examples/default](examples/default) for a complete root. Set `ARM_SUBSCRIPTION_ID` before
+running it.
 
 ```hcl
-provider "azurerm" {
-  features {}
-}
+module "automation_account" {
+  source = "git::https://github.com/Coalfire-CF/terraform-azurerm-automation-account?ref=v2.0.0"
 
-module "va-aa" {
-  source                     = "github.com/Coalfire-CF/terraform-azurerm-automation-account"
-  automation_account_name    = "${local.resource_prefix}-aa"
-  resource_group_name        = data.terraform_remote_state.setup.outputs.management_rg_name
+  automation_account_name    = var.automation_account_name
+  resource_group_name        = var.resource_group_name
   location                   = var.location
-  log_analytics_workspace_id = data.terraform_remote_state.core.outputs.core_la_id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  global_tags = var.global_tags
-  regional_tags = merge({
-    Function    = "Automation"
-    Plane       = "Management"
-    Environment = "Production"
-  }, var.regional_tags, local.global_local_tags)
+  tags = var.tags
 }
 ```
 
 <!-- markdownlint-disable MD033 MD034 MD060 -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.16.6, < 2.0 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 5.10 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.74.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 5.10 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_diag"></a> [diag](#module\_diag) | git::https://github.com/Coalfire-CF/terraform-azurerm-diagnostics | v2.0.0 |
 
 ## Resources
 
@@ -99,21 +84,22 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_automation_account_name"></a> [automation\_account\_name](#input\_automation\_account\_name) | Name of the Automation Account | `string` | n/a | yes |
-| <a name="input_global_tags"></a> [global\_tags](#input\_global\_tags) | Global level tags | `map(string)` | n/a | yes |
+| <a name="input_local_authentication_enabled"></a> [local\_authentication\_enabled](#input\_local\_authentication\_enabled) | Allow key-based (local) authentication. Default false. Setting true enables webhooks, DSC node registration keys and agent-based hybrid workers that authenticate with keys instead of Entra ID. | `bool` | `false` | no |
 | <a name="input_location"></a> [location](#input\_location) | The Azure location/region to create resources in. | `string` | n/a | yes |
 | <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | ID of the Log Analytics Workspace diagnostic logs should be sent to | `string` | n/a | yes |
-| <a name="input_regional_tags"></a> [regional\_tags](#input\_regional\_tags) | Regional level tags | `map(string)` | n/a | yes |
+| <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | Allow access from public networks. Default false. Setting true exposes the webhook, DSC and hybrid worker endpoints to the internet. With false, callers reach the account through a private endpoint they create. | `bool` | `false` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource Group of Automation Account | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags applied to the Automation Account. | `map(string)` | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_aa_dsc_endpoint"></a> [aa\_dsc\_endpoint](#output\_aa\_dsc\_endpoint) | n/a |
-| <a name="output_aa_id"></a> [aa\_id](#output\_aa\_id) | n/a |
-| <a name="output_aa_name"></a> [aa\_name](#output\_aa\_name) | n/a |
-| <a name="output_aa_primary_registration_key"></a> [aa\_primary\_registration\_key](#output\_aa\_primary\_registration\_key) | n/a |
-| <a name="output_aa_principal_id"></a> [aa\_principal\_id](#output\_aa\_principal\_id) | n/a |
+| <a name="output_aa_dsc_endpoint"></a> [aa\_dsc\_endpoint](#output\_aa\_dsc\_endpoint) | DSC server endpoint of the Automation Account. |
+| <a name="output_aa_id"></a> [aa\_id](#output\_aa\_id) | ID of the Automation Account. |
+| <a name="output_aa_name"></a> [aa\_name](#output\_aa\_name) | Name of the Automation Account. |
+| <a name="output_aa_primary_registration_key"></a> [aa\_primary\_registration\_key](#output\_aa\_primary\_registration\_key) | Primary DSC registration key, exposed for DSC node registration. Sensitive. DSC key registration needs local\_authentication\_enabled = true. |
+| <a name="output_aa_principal_id"></a> [aa\_principal\_id](#output\_aa\_principal\_id) | Principal ID of the system-assigned managed identity. |
 <!-- markdownlint-enable MD033 MD034 MD060 -->
 
 

@@ -34,3 +34,6 @@ override.tf.json
 # Ansible
 *.pub
 *.ppk
+
+# Child module lock files do not control consumer provider selections
+.terraform.lock.hcl
