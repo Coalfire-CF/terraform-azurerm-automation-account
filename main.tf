@@ -14,7 +14,7 @@ resource "azurerm_automation_account" "aa" {
 }
 
 module "diag" {
-  source                = "git::https://github.com/Coalfire-CF/terraform-azurerm-diagnostics?ref=v2.0.0"
+  source                = "git::https://github.com/Coalfire-CF/terraform-azurerm-diagnostics?ref=v3.0.0"
   diag_log_analytics_id = var.log_analytics_workspace_id
   resource_id           = azurerm_automation_account.aa.id
   resource_type         = "aa"
