@@ -6,7 +6,8 @@
 
 ## Description
 
-Module to create an Automation Account with a system-assigned managed identity. It is used in the [Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework.
+Module to create an Automation Account with a system-assigned managed identity. It is used in the
+[Coalfire-Azure-RAMPpak](https://github.com/Coalfire-CF/Coalfire-Azure-RAMPpak) FedRAMP Framework.
 
 Learn more at [Coalfire OpenSource](https://coalfire.com/opensource).
 
